@@ -1,24 +1,14 @@
-import { useSelector, useDispatch } from "react-redux";
-import { addFavorite } from "../../features/Characters/characterSlice";
-
+import React from "react";
 import CharacterCard from "./CharacterCard";
 
-const CharacterList = () => {
-  const characters = useSelector((state) => state.characters.characters);
-  const dispatch = useDispatch();
-
-  const handleAddFavorite = (characterId) => {
-    // Llama a la acción addFavorite con el ID del personaje
-    dispatch(addFavorite(characterId));
-  };
-
+const CharacterList = ({ characters, onCharacterClick }) => {
   return (
     <div className="character-list">
       {characters.map((character) => (
         <CharacterCard
           key={character.id}
           character={character}
-          onAddFavorite={handleAddFavorite}
+          onClick={() => onCharacterClick(character.id)}
         />
       ))}
     </div>

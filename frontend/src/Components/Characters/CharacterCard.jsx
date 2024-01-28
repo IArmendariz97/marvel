@@ -1,21 +1,23 @@
-import { useSelector } from "react-redux";
+import React from "react";
+import { Card } from "antd";
 
-const CharacterCard = ({ character, onAddFavorite }) => {
-  const isFavorite = useSelector((state) =>
-    state.characters.favorites.includes(character.id)
-  );
+const { Meta } = Card;
 
+const CharacterCard = ({ character, onClick }) => {
   return (
-    <div className="character-card">
-      <h2>{character.name}</h2>
-      <img src={character.image} alt={character.name} />
-      {/* Agregar el botón de favoritos */}
-      <button
-        onClick={() => onAddFavorite(character.id)}
-        style={{ backgroundColor: isFavorite ? "yellow" : "transparent" }}
+    <div className="character-card" onClick={onClick}>
+      <Card
+        hoverable
+        style={{ width: 240 }}
+        cover={
+          <img
+            alt={character.name}
+            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+          />
+        }
       >
-        {isFavorite ? "Favorito" : "Agregar a Favoritos"}
-      </button>
+        <Meta title={character.name} description={character.description} />
+      </Card>
     </div>
   );
 };

@@ -40,3 +40,43 @@
 .read-the-docs {
   color: #888;
 }
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 0;
+  background-color: #fff;
+  box-shadow: 0 0 1em #00000022;
+  margin: auto;
+
+  /* Positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 100px;
+  width: 100%;
+  max-width: 600px;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 1em #00000022;
+}
+
+.navbarLogo {
+  height: 3em;
+  width: 6em;
+  margin-left: 1em;
+}
+
+.favoritesButton {
+  margin-right: 1em;
+}

@@ -1,13 +1,13 @@
 // charactersSlice.js
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCharacters } from "./charactersService"; // Importamos la función para hacer la solicitud
+import { fetchAllCharacters } from "./charactersService"; // Importamos la función para hacer la solicitud
 
 // Creamos una acción asincrónica para cargar los personajes
 export const loadCharacters = createAsyncThunk(
   "characters/loadCharacters",
-  async (searchTerm) => {
-    const response = await fetchCharacters(searchTerm);
+  async () => {
+    const response = await fetchAllCharacters();
     return response.data.results;
   }
 );
@@ -16,19 +16,27 @@ export const loadCharacters = createAsyncThunk(
 const charactersSlice = createSlice({
   name: "characters",
   initialState: {
-    characters: [], // Estado inicial con un array de personajes vacío
-    favorites: [],
+    characters: [],
+    favorites: JSON.parse(localStorage.getItem("favorites")) || [],
     loading: false,
     error: null,
+    searchResults: [], // Nuevo estado para almacenar los resultados de búsqueda
   },
   reducers: {
-    // Podríamos definir otras acciones relacionadas con los personajes aquí, como agregar favoritos\
     addFavorite: (state, action) => {
       const characterId = action.payload;
       if (!state.favorites.includes(characterId)) {
         state.favorites.push(characterId);
+        localStorage.setItem("favorites", JSON.stringify(state.favorites));
       }
+    },
+    removeFavorite: (state, action) => {
+      const characterId = action.payload;
+      state.favorites = state.favorites.filter((id) => id !== characterId);
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
+    },
+    clearSearchResults: (state) => {
+      state.searchResults = [];
     },
   },
   extraReducers: (builder) => {
@@ -48,5 +56,11 @@ const charactersSlice = createSlice({
   },
 });
 
-export const { addFavorite } = charactersSlice.actions;
-export default charactersSlice.reducer;
+export const { addFavorite, removeFavorite, clearSearchResults } =
+  charactersSlice.actions;
+
+export const selectCharacters = (state) => state.characters.characters;
+export const selectFavorites = (state) => state.characters.favorites;
+export const selectSearchResults = (state) => state.characters.searchResults;
+
+export default charactersSlice;
