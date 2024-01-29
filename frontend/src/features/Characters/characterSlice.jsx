@@ -30,6 +30,7 @@ const charactersSlice = createSlice({
     favoritesSearches:
       JSON.parse(localStorage.getItem("favoriteSearches")) || [],
     loading: false,
+    loadingCharacters: false,
     error: null,
     searchResults: [],
   },
@@ -90,15 +91,15 @@ const charactersSlice = createSlice({
     // Manejamos el caso de éxito de la acción loadCharacters
     builder.addCase(loadCharacters.pending, (state) => {
       console.log("Loading characters");
-      state.loading = true;
+      state.loadingCharacters = true;
       state.error = null;
     });
     builder.addCase(loadCharacters.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingCharacters = false;
       state.characters = action.payload;
     });
     builder.addCase(loadCharacters.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingCharacters = false;
       state.error = action.error.message;
     });
 

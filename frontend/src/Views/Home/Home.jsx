@@ -25,7 +25,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 20;
-  const { loading } = useSelector((state) => state.characters);
+  const { loadingCharacters } = useSelector((state) => state.characters);
   const favoritesSearches = useSelector(selectFavoritesSearches);
   // Función para manejar el cambio de página
   const handlePageChange = (page) => {
@@ -40,8 +40,6 @@ const Home = () => {
   const paginatedCharacters = searchQuery
     ? searchResults.slice(startIndex, endIndex)
     : characters.slice(startIndex, endIndex);
-
-  console.log(characters);
 
   const handleSearch = (value) => {
     setSearchQuery(value);
@@ -101,7 +99,7 @@ const Home = () => {
         setFilterByCharacter={setFilterByCharacter}
         renderFavoriteSearches={renderFavoriteSearches}
       />
-      {loading ? (
+      {loadingCharacters ? (
         <div>
           <video width={"100%"} height={"100%"} autoPlay loop muted>
             <source src={video} type="video/mp4" />
