@@ -1,14 +1,22 @@
 // charactersSlice.js
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAllCharacters } from "./charactersService"; // Importamos la función para hacer la solicitud
+import { fetchAllCharacters, fetchComicCharacter } from "./charactersService"; // Importamos la función para hacer la solicitud
 
 // Creamos una acción asincrónica para cargar los personajes
 export const loadCharacters = createAsyncThunk(
   "characters/loadCharacters",
   async () => {
     const response = await fetchAllCharacters();
-    return response.data.results;
+    return response;
+  }
+);
+
+export const loadComicCharacter = createAsyncThunk(
+  "characters/loadComicCharacter",
+  async (characterId) => {
+    const response = await fetchComicCharacter(characterId);
+    return response;
   }
 );
 
@@ -17,10 +25,11 @@ const charactersSlice = createSlice({
   name: "characters",
   initialState: {
     characters: [],
+    comics: [],
     favorites: JSON.parse(localStorage.getItem("favorites")) || [],
     loading: false,
     error: null,
-    searchResults: [], // Nuevo estado para almacenar los resultados de búsqueda
+    searchResults: [],
   },
   reducers: {
     addFavorite: (state, action) => {
@@ -38,10 +47,30 @@ const charactersSlice = createSlice({
     clearSearchResults: (state) => {
       state.searchResults = [];
     },
+    filterCharacters: (state, action) => {
+      const { searchValue, characters } = action.payload;
+      const results = characters.filter((character) => {
+        // Buscar en el nombre del personaje
+        const characterName = character.name.toLowerCase();
+        const value = searchValue.toLowerCase();
+        if (characterName.includes(value)) {
+          return true;
+        }
+        // Buscar en los nombres de los cómics del personaje
+        for (const comic of character.comics) {
+          if (comic.name.toLowerCase().includes(value)) {
+            return true;
+          }
+        }
+        return false;
+      });
+      state.searchResults = results;
+    },
   },
   extraReducers: (builder) => {
     // Manejamos el caso de éxito de la acción loadCharacters
     builder.addCase(loadCharacters.pending, (state) => {
+      console.log("Loading characters");
       state.loading = true;
       state.error = null;
     });
@@ -53,14 +82,33 @@ const charactersSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(loadComicCharacter.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(loadComicCharacter.fulfilled, (state, action) => {
+      state.loading = false;
+
+      state.comics = action.payload;
+    });
+    builder.addCase(loadComicCharacter.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { addFavorite, removeFavorite, clearSearchResults } =
-  charactersSlice.actions;
+export const {
+  addFavorite,
+  removeFavorite,
+  clearSearchResults,
+  filterCharacters,
+} = charactersSlice.actions;
 
 export const selectCharacters = (state) => state.characters.characters;
 export const selectFavorites = (state) => state.characters.favorites;
 export const selectSearchResults = (state) => state.characters.searchResults;
+export const selectComics = (state) => state.characters.comics;
 
 export default charactersSlice;

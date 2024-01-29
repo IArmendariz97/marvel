@@ -1,7 +1,8 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width: 1280px; */
+  width: 100%;
+  margin: 0 0;
+  /*padding: 2rem; */
   text-align: center;
 }
 
@@ -79,4 +80,40 @@
 
 .favoritesButton {
   margin-right: 1em;
+}
+
+.character-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 80px;
+}
+
+.character-card {
+  width: calc(25% - 20px); /* Ancho de cada tarjeta, con margen */
+  margin: 10px;
+}
+
+@media (max-width: 1200px) {
+  .character-card {
+    width: calc(
+      33.33% - 20px
+    ); /* Cambiar el ancho de la tarjeta en pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 768px) {
+  .character-card {
+    width: calc(
+      50% - 20px
+    ); /* Cambiar el ancho de la tarjeta en pantallas aún más pequeñas */
+  }
+}
+
+@media (max-width: 576px) {
+  .character-card {
+    width: calc(
+      100% - 20px
+    ); /* Cambiar el ancho de la tarjeta en dispositivos móviles */
+  }
 }
