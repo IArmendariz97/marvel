@@ -82,9 +82,13 @@ const CharacterCard = ({ character }) => {
         footer={null}
       >
         <h3>Comics:</h3>
-        <Space size={16} wrap>
+        <Space size={16} wrap className="spaceComics">
           {uniqueComics.map((comic) => (
-            <div key={comic.id} style={{ width: 200, textAlign: "center" }}>
+            <div
+              className="comicCards"
+              key={comic.id}
+              style={{ width: 200, textAlign: "center" }}
+            >
               <h3 style={{ height: "40px" }}>{comic.tittle}</h3>
               <img
                 alt={comic.tittle}

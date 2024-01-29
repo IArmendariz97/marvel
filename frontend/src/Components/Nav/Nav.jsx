@@ -55,7 +55,7 @@ const Navbar = ({
     <Header className="ant-layout-header navbar">
       <img src={marvelLogo} alt="Marvel logo" className="navbarLogo" />
       <div className="search">
-        <Space>
+        <Space className="spaceSearch">
           <AutoComplete
             options={options}
             onSearch={handleSearchChange} // Llamar a la función de búsqueda cuando cambia el texto
@@ -67,6 +67,7 @@ const Navbar = ({
             }
             style={{ width: 400, marginTop: 16 }}
             disabled={loading}
+            className="searchInput"
           />
           <Button onClick={handleToggleFilter}>
             {filterByCharacter ? "Filter by Comic" : "Filter by Character"}

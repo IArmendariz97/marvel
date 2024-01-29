@@ -50,8 +50,6 @@
   background-color: #fff;
   box-shadow: 0 0 1em #00000022;
   margin: auto;
-
-  /* Positioning */
   position: fixed;
   top: 0;
   left: 0;
@@ -63,8 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 100px;
-  width: 100%;
+  margin: 0.5em;
   max-width: 600px;
   padding: 0.5em;
   border-radius: 0.5em;
@@ -80,6 +77,45 @@
 
 .favoritesButton {
   margin-right: 1em;
+}
+
+@media screen and (max-width: 768px) {
+  .navbarLogo {
+    display: none;
+  }
+  .spaceSearch {
+    text-align: start !important;
+  }
+  .ant-space-item {
+    margin: 0 !important;
+    max-width: 30% !important;
+  }
+  .search {
+    display: flex;
+    justify-content: flex-start; /* Alinear a la izquierda */
+    max-width: 83% !important;
+    margin: 0 4px 0 0 !important;
+  }
+  .searchInput {
+    max-width: 100% !important;
+  }
+  .favoritesButton {
+    margin-right: 0.5em;
+  }
+  .comicCards {
+    max-width: 100% !important; /* Ocupar todo el ancho disponible */
+    margin-bottom: 20px; /* Espacio entre las tarjetas */
+  }
+  .comicCards h3 {
+    font-size: small;
+    height: 53px !important;
+  }
+  .spaceComics {
+    justify-content: center !important;
+    gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 .character-list {
@@ -104,6 +140,7 @@
 
 @media (max-width: 768px) {
   .character-card {
+    margin-left: calc(25% - 10px) !important;
     width: calc(
       50% - 20px
     ); /* Cambiar el ancho de la tarjeta en pantallas aún más pequeñas */
