@@ -21,8 +21,9 @@ const Home = () => {
   const [dispatchie, setDispatchie] = useState(false);
   const [filterByCharacter, setFilterByCharacter] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Estado para almacenar la página actual
-  const pageSize = 20; // Tamaño de la página
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+  const [favoriteSearches, setFavoriteSearches] = useState([]);
 
   // Función para manejar el cambio de página
   const handlePageChange = (page) => {
@@ -54,9 +55,45 @@ const Home = () => {
     }
   };
 
-  const handleFavoritesClick = (characterId) => {
-    // Lógica para mostrar los favoritos
+  const handleFavoritesClick = () => {
+    if (searchQuery.trim() !== "") {
+      setFavoriteSearches((prevSearches) => [
+        ...prevSearches,
+        searchQuery.trim(),
+      ]);
+    }
   };
+
+  const renderFavoriteSearches = () => {
+    // Crear un conjunto para almacenar búsquedas únicas
+    const uniqueSearches = new Set(favoriteSearches);
+
+    // Convertir el conjunto nuevamente a un array
+    const uniqueSearchesArray = Array.from(uniqueSearches);
+
+    return (
+      <ul>
+        {uniqueSearchesArray.map((search, index) => (
+          <li key={index} onClick={() => handleSearch(search)}>
+            {search}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
+  useEffect(() => {
+    localStorage.setItem("favoriteSearches", JSON.stringify(favoriteSearches));
+  }, [favoriteSearches]);
+
+  useEffect(() => {
+    const storedFavoriteSearches = JSON.parse(
+      localStorage.getItem("favoriteSearches")
+    );
+    if (storedFavoriteSearches) {
+      setFavoriteSearches(storedFavoriteSearches);
+    }
+  }, []);
 
   useEffect(() => {
     if (characters.length === 0 && !dispatchie) {
@@ -72,6 +109,7 @@ const Home = () => {
         onFavoritesClick={handleFavoritesClick}
         filterByCharacter={filterByCharacter}
         setFilterByCharacter={setFilterByCharacter}
+        renderFavoriteSearches={renderFavoriteSearches}
       />
       {characters && characters.length === 0 && !dispatchie ? (
         <div>
