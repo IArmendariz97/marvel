@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 
-const apiKey = "9386b7e8b2a423e7daa017a43a0421d9";
-const privateKey = "7763a538b56ed3731f3ced1ffe0873a1d2c6a7cd";
+const apiKey = "5574501ea74f5115a40c388f0d5b1b08";
+const privateKey = "055fe46d725905cc51054c4247fed19df97a2c35";
 
 function generateHash() {
   const timestamp = Date.now().toString();

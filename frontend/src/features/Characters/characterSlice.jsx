@@ -56,6 +56,13 @@ const charactersSlice = createSlice({
         if (characterName.includes(value)) {
           return true;
         }
+      });
+      state.searchResults = results;
+    },
+    filterCharactersByComic: (state, action) => {
+      const { searchValue, characters } = action.payload;
+      const results = characters.filter((character) => {
+        const value = searchValue.toLowerCase();
         // Buscar en los nombres de los cómics del personaje
         for (const comic of character.comics) {
           if (comic.name.toLowerCase().includes(value)) {
@@ -104,6 +111,7 @@ export const {
   removeFavorite,
   clearSearchResults,
   filterCharacters,
+  filterCharactersByComic,
 } = charactersSlice.actions;
 
 export const selectCharacters = (state) => state.characters.characters;

@@ -9,6 +9,7 @@ import {
   selectSearchResults,
   filterCharacters,
   clearSearchResults,
+  filterCharactersByComic,
 } from "../../features/Characters/characterSlice";
 
 import video from "../../assets/Marvel.mp4";
@@ -18,7 +19,7 @@ const Home = () => {
   const characters = useSelector(selectCharacters);
   const searchResults = useSelector(selectSearchResults);
   const [dispatchie, setDispatchie] = useState(false);
-
+  const [filterByCharacter, setFilterByCharacter] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // Estado para almacenar la página actual
   const pageSize = 20; // Tamaño de la página
@@ -45,7 +46,11 @@ const Home = () => {
     if (value.trim() === "") {
       dispatch(clearSearchResults());
     } else {
-      dispatch(filterCharacters({ searchValue: value, characters }));
+      if (filterByCharacter) {
+        dispatch(filterCharacters({ searchValue: value, characters }));
+      } else {
+        dispatch(filterCharactersByComic({ searchValue: value, characters }));
+      }
     }
   };
 
@@ -62,7 +67,12 @@ const Home = () => {
 
   return (
     <div className="home">
-      <Navbar onSearch={handleSearch} onFavoritesClick={handleFavoritesClick} />
+      <Navbar
+        onSearch={handleSearch}
+        onFavoritesClick={handleFavoritesClick}
+        filterByCharacter={filterByCharacter}
+        setFilterByCharacter={setFilterByCharacter}
+      />
       {characters && characters.length === 0 && !dispatchie ? (
         <div>
           <video width={"100%"} height={"100%"} autoPlay loop muted>

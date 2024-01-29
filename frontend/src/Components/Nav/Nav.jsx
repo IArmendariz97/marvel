@@ -5,9 +5,14 @@ import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 const { Header } = Layout;
 
-const Navbar = ({ onSearch, onFavoritesClick }) => {
+const Navbar = ({
+  onSearch,
+  onFavoritesClick,
+  filterByCharacter,
+  setFilterByCharacter,
+}) => {
   const { loading } = useSelector((state) => state.characters);
-  const [options, setOptions] = useState([]); // Estado para almacenar las opciones filtradas
+  const [options, setOptions] = useState([]);
 
   const handleSearch = (value) => {
     onSearch(value);
@@ -23,10 +28,13 @@ const Navbar = ({ onSearch, onFavoritesClick }) => {
   }, [characters]);
 
   // Combinar los nombres de los personajes y cómics
-  const allOptions = useMemo(
-    () => [...characters.map((character) => character.name), ...comics],
-    [characters, comics]
-  );
+  const allOptions = useMemo(() => {
+    if (filterByCharacter) {
+      return characters.map((character) => character.name);
+    } else {
+      return comics;
+    }
+  }, [characters, comics, filterByCharacter]);
 
   // Filtrar opciones basadas en el valor de búsqueda
   const handleSearchChange = (value) => {
@@ -37,6 +45,10 @@ const Navbar = ({ onSearch, onFavoritesClick }) => {
     setOptions(
       filteredOptions.map((option) => ({ value: option })) // Actualizar el estado con las opciones filtradas
     );
+  };
+
+  const handleToggleFilter = () => {
+    setFilterByCharacter((prevFilterByCharacter) => !prevFilterByCharacter);
   };
 
   return (
@@ -51,11 +63,14 @@ const Navbar = ({ onSearch, onFavoritesClick }) => {
             placeholder={
               loading
                 ? "WAIT UNTIL ALL CHARACTERS ARE LOADED"
-                : "Search characters or comics"
+                : `Search ${filterByCharacter ? "characters" : "comics"}`
             }
             style={{ width: 400, marginTop: 16 }}
             disabled={loading}
           />
+          <Button onClick={handleToggleFilter}>
+            {filterByCharacter ? "Filter by Comic" : "Filter by Character"}
+          </Button>
         </Space>
       </div>
       <Button
