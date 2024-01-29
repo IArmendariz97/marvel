@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../Components/Nav/Nav";
-import { Spin, Pagination } from "antd"; // Importar componente de paginación
+import { Pagination } from "antd"; // Importar componente de paginación
 import CharacterList from "../../Components/Characters/CharacterList";
 import {
   loadCharacters,
@@ -10,6 +10,8 @@ import {
   filterCharacters,
   clearSearchResults,
   filterCharactersByComic,
+  addFavoriteSearch,
+  selectFavoritesSearches,
 } from "../../features/Characters/characterSlice";
 
 import video from "../../assets/Marvel.mp4";
@@ -23,8 +25,8 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 20;
-  const [favoriteSearches, setFavoriteSearches] = useState([]);
 
+  const favoritesSearches = useSelector(selectFavoritesSearches);
   // Función para manejar el cambio de página
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -57,16 +59,13 @@ const Home = () => {
 
   const handleFavoritesClick = () => {
     if (searchQuery.trim() !== "") {
-      setFavoriteSearches((prevSearches) => [
-        ...prevSearches,
-        searchQuery.trim(),
-      ]);
+      dispatch(addFavoriteSearch(searchQuery));
     }
   };
 
   const renderFavoriteSearches = () => {
     // Crear un conjunto para almacenar búsquedas únicas
-    const uniqueSearches = new Set(favoriteSearches);
+    const uniqueSearches = new Set(favoritesSearches);
 
     // Convertir el conjunto nuevamente a un array
     const uniqueSearchesArray = Array.from(uniqueSearches);
@@ -74,26 +73,17 @@ const Home = () => {
     return (
       <ul>
         {uniqueSearchesArray.map((search, index) => (
-          <li key={index} onClick={() => handleSearch(search)}>
+          <li
+            key={index}
+            onClick={() => handleSearch(search)}
+            className="liSearches"
+          >
             {search}
           </li>
         ))}
       </ul>
     );
   };
-
-  useEffect(() => {
-    localStorage.setItem("favoriteSearches", JSON.stringify(favoriteSearches));
-  }, [favoriteSearches]);
-
-  useEffect(() => {
-    const storedFavoriteSearches = JSON.parse(
-      localStorage.getItem("favoriteSearches")
-    );
-    if (storedFavoriteSearches) {
-      setFavoriteSearches(storedFavoriteSearches);
-    }
-  }, []);
 
   useEffect(() => {
     if (characters.length === 0 && !dispatchie) {

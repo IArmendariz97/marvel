@@ -27,11 +27,23 @@ const charactersSlice = createSlice({
     characters: [],
     comics: [],
     favorites: JSON.parse(localStorage.getItem("favorites")) || [],
+    favoritesSearches:
+      JSON.parse(localStorage.getItem("favoriteSearches")) || [],
     loading: false,
     error: null,
     searchResults: [],
   },
   reducers: {
+    addFavoriteSearch: (state, action) => {
+      const search = action.payload;
+      if (!state.favoritesSearches.includes(search)) {
+        state.favoritesSearches.push(search);
+        localStorage.setItem(
+          "favoriteSearches",
+          JSON.stringify(state.favoritesSearches)
+        );
+      }
+    },
     addFavorite: (state, action) => {
       const characterId = action.payload;
       if (!state.favorites.includes(characterId)) {
@@ -112,11 +124,14 @@ export const {
   clearSearchResults,
   filterCharacters,
   filterCharactersByComic,
+  addFavoriteSearch,
 } = charactersSlice.actions;
 
 export const selectCharacters = (state) => state.characters.characters;
 export const selectFavorites = (state) => state.characters.favorites;
 export const selectSearchResults = (state) => state.characters.searchResults;
+export const selectFavoritesSearches = (state) =>
+  state.characters.favoritesSearches;
 export const selectComics = (state) => state.characters.comics;
 
 export default charactersSlice;

@@ -130,6 +130,23 @@
   margin: 10px;
 }
 
+.liSearches {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 1em #00000022;
+  margin: 0.5em;
+}
+.liSearches:hover {
+  background-color: blue;
+  box-shadow: 0 0 1em #00000022;
+  margin: 0.5em;
+  cursor: pointer;
+}
+
 @media (max-width: 1200px) {
   .character-card {
     width: calc(

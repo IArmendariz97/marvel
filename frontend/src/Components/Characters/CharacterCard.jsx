@@ -81,6 +81,7 @@ const CharacterCard = ({ character }) => {
         onCancel={handleCloseModal}
         footer={null}
       >
+        {character.description && <p>{character.description}</p>}
         <h3>Comics:</h3>
         <Space size={16} wrap className="spaceComics">
           {uniqueComics.map((comic) => (
