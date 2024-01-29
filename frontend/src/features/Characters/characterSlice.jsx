@@ -90,7 +90,6 @@ const charactersSlice = createSlice({
   extraReducers: (builder) => {
     // Manejamos el caso de éxito de la acción loadCharacters
     builder.addCase(loadCharacters.pending, (state) => {
-      console.log("Loading characters");
       state.loadingCharacters = true;
       state.error = null;
     });

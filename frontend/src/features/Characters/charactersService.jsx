@@ -63,7 +63,7 @@ async function fetchAllCharacters() {
           offset: offset,
         },
       });
-      console.log(response);
+
       if (!totalCharacters) {
         totalCharacters = response?.data?.data?.total || 0;
       }
