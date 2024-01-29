@@ -5,7 +5,7 @@ const apiKey = import.meta.env.VITE_MARVEL_API_PUBLIC_KEY;
 const privateKey = import.meta.env.VITE_MARVEL_API_PRIVATE_KEY;
 
 const marvelApi = axios.create({
-  baseURL: "http://gateway.marvel.com/v1/public",
+  baseURL: "https://gateway.marvel.com/v1/public",
   params: {
     apikey: apiKey,
   },
