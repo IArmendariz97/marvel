@@ -5,6 +5,7 @@ import { Pagination } from "antd"; // Importar componente de paginación
 import CharacterList from "../../Components/Characters/CharacterList";
 import {
   loadCharacters,
+  loadFirstCharacters,
   selectCharacters,
   selectSearchResults,
   filterCharacters,
@@ -13,8 +14,6 @@ import {
   addFavoriteSearch,
   selectFavoritesSearches,
 } from "../../features/Characters/characterSlice";
-
-import video from "../../assets/Marvel.mp4";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ const Home = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
+  console.log(characters);
   // Calcular el índice inicial y final de los personajes a mostrar en la página actual
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
@@ -84,11 +83,17 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (characters.length === 0 && !dispatchie) {
-      dispatch(loadCharacters());
-      setDispatchie(true);
-    }
-  }, [dispatch]); // Agregar charactersLoaded como dependencia del efecto
+    const loadAllCharacters = async () => {
+      if (characters.length === 0 && !dispatchie) {
+        await dispatch(loadFirstCharacters());
+        await dispatch(loadCharacters());
+        console.log("dispatched");
+        setDispatchie(true);
+      }
+    };
+
+    loadAllCharacters();
+  }, [dispatch]);
 
   return (
     <div className="home">
@@ -98,14 +103,10 @@ const Home = () => {
         filterByCharacter={filterByCharacter}
         setFilterByCharacter={setFilterByCharacter}
         renderFavoriteSearches={renderFavoriteSearches}
+        clearSearchResults={clearSearchResults}
       />
       {loadingCharacters ? (
-        <div>
-          <video width={"100%"} height={"100%"} autoPlay loop muted>
-            <source src={video} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+        <div className="loader"></div>
       ) : (
         <>
           <CharacterList

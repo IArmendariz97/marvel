@@ -1,7 +1,11 @@
 // charactersSlice.js
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchAllCharacters, fetchComicCharacter } from "./charactersService"; // Importamos la función para hacer la solicitud
+import {
+  fetchAllCharacters,
+  fetchComicCharacter,
+  fetchFirstCharacters,
+} from "./charactersService"; // Importamos la función para hacer la solicitud
 
 // Creamos una acción asincrónica para cargar los personajes
 export const loadCharacters = createAsyncThunk(
@@ -16,6 +20,14 @@ export const loadComicCharacter = createAsyncThunk(
   "characters/loadComicCharacter",
   async (characterId) => {
     const response = await fetchComicCharacter(characterId);
+    return response;
+  }
+);
+
+export const loadFirstCharacters = createAsyncThunk(
+  "characters/loadFirstCharacters",
+  async () => {
+    const response = await fetchFirstCharacters();
     return response;
   }
 );
@@ -89,16 +101,29 @@ const charactersSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Manejamos el caso de éxito de la acción loadCharacters
-    builder.addCase(loadCharacters.pending, (state) => {
+    builder.addCase(loadFirstCharacters.pending, (state) => {
       state.loadingCharacters = true;
       state.error = null;
     });
-    builder.addCase(loadCharacters.fulfilled, (state, action) => {
+    builder.addCase(loadFirstCharacters.fulfilled, (state, action) => {
       state.loadingCharacters = false;
       state.characters = action.payload;
     });
-    builder.addCase(loadCharacters.rejected, (state, action) => {
+    builder.addCase(loadFirstCharacters.rejected, (state, action) => {
       state.loadingCharacters = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(loadCharacters.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(loadCharacters.fulfilled, (state, action) => {
+      state.loading = false;
+      state.characters = state.characters.concat(action.payload);
+    });
+    builder.addCase(loadCharacters.rejected, (state, action) => {
+      state.loading = false;
       state.error = action.error.message;
     });
 

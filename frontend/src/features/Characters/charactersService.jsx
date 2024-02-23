@@ -45,13 +45,41 @@ async function fetchComicCharacter(characterId) {
   }
 }
 
+async function fetchFirstCharacters() {
+  try {
+    const { ts, hash } = generateHash();
+    const response = await marvelApi.get("/characters", {
+      params: {
+        apikey: apiKey,
+        ts: ts,
+        hash: hash,
+        limit: 100,
+      },
+    });
+    const characters =
+      response?.data?.data?.results?.map((character) => ({
+        id: character.id,
+        name: character.name,
+        description: character.description,
+        resourceURI: character.resourceURI,
+        thumbnail: character.thumbnail,
+        comics: character.comics.items,
+      })) || [];
+    return characters;
+  } catch (error) {
+    console.error("Error fetching characters:", error);
+    throw error;
+  }
+}
+
 async function fetchAllCharacters() {
   try {
     const limit = 100;
-    let offset = 0;
+    let offset = 100;
     let allCharacters = [];
     let response;
     let totalCharacters = 0;
+    const characterIdsSet = new Set();
     do {
       const { ts, hash } = generateHash();
       response = await marvelApi.get("/characters", {
@@ -78,9 +106,16 @@ async function fetchAllCharacters() {
           comics: character.comics.items,
         })) || [];
 
-      allCharacters = allCharacters.concat(characters);
+      const uniqueCharacters = characters.filter(
+        (character) => !characterIdsSet.has(character.id)
+      );
+
+      allCharacters = allCharacters.concat(uniqueCharacters);
+      uniqueCharacters.forEach((character) => {
+        characterIdsSet.add(character.id); // Agregar IDs de personajes al conjunto
+      });
       offset += limit;
-    } while (offset < totalCharacters && offset < 1400);
+    } while (offset < totalCharacters && allCharacters.length < 1500);
 
     return allCharacters;
   } catch (error) {
@@ -89,4 +124,4 @@ async function fetchAllCharacters() {
   }
 }
 
-export { fetchAllCharacters, fetchComicCharacter };
+export { fetchAllCharacters, fetchComicCharacter, fetchFirstCharacters };

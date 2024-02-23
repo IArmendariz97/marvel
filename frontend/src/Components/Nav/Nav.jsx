@@ -3,7 +3,7 @@ import { StarOutlined } from "@ant-design/icons";
 import marvelLogo from "../../assets/marvel.png";
 import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-
+import DarkModeToggle from "../DarkModeToggle";
 const { Header } = Layout;
 
 const Navbar = ({
@@ -12,6 +12,7 @@ const Navbar = ({
   filterByCharacter,
   setFilterByCharacter,
   renderFavoriteSearches,
+  clearSearchResults,
 }) => {
   const { loading } = useSelector((state) => state.characters);
   const [options, setOptions] = useState([]);
@@ -20,6 +21,7 @@ const Navbar = ({
   const handleSearch = (value) => {
     onSearch(value);
   };
+  const [darkMode, setDarkMode] = useState(false);
 
   const characters = useSelector((state) => state.characters.characters);
   const comics = useMemo(() => {
@@ -47,6 +49,7 @@ const Navbar = ({
   };
 
   const handleToggleFilter = () => {
+    clearSearchResults();
     setFilterByCharacter((prevFilterByCharacter) => !prevFilterByCharacter);
   };
 
@@ -58,9 +61,19 @@ const Navbar = ({
   const toggleFavoriteSearchesModal = () => {
     setFavoriteSearchesVisible(!favoriteSearchesVisible);
   };
+  const handleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   return (
-    <Header className="ant-layout-header navbar">
+    <Header
+      className="ant-layout-header navbar"
+      id="navbar"
+      style={{
+        background: darkMode ? "#333" : "#fff",
+        color: darkMode ? "#fff" : "#000",
+      }}
+    >
       <img src={marvelLogo} alt="Marvel logo" className="navbarLogo" />
       <div className="search">
         <Space className="spaceSearch">
@@ -81,6 +94,7 @@ const Navbar = ({
             {filterByCharacter ? "Filter by Comic" : "Filter by Character"}
           </Button>
         </Space>
+        <DarkModeToggle onClick={handleDarkMode} />
       </div>
       <Button
         icon={<StarOutlined />}

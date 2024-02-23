@@ -4,6 +4,27 @@
   margin: 0 0;
   /*padding: 2rem; */
   text-align: center;
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;
+}
+
+html.light {
+  background-color: rgb(255, 255, 255);
+  color: black !important;
+}
+
+html.dark {
+  background-color: rgb(0, 0, 0);
+  color: white !important;
+}
+
+.bg-navbar {
+  background-color: #000000; /* Color de fondo oscuro */
+}
+
+.bg-white {
+  background-color: #fff; /* Color de fondo claro */
 }
 
 .logo {
@@ -170,4 +191,17 @@
       100% - 20px
     ); /* Cambiar el ancho de la tarjeta en dispositivos móviles */
   }
+}
+
+.loader {
+  background-image: url("./assets/loading.gif"); /* Ruta a tu GIF personalizado */
+  background-size: cover; /* Ajusta el tamaño del GIF */
+  /* background-color: white; */
+  /* margin: auto; */
+
+  /* background-color: #f0f0f0; */
+  width: 125px; /* Ancho del GIF */
+  height: 100px; /* Altura del GIF */
+  /* Centra el GIF horizontalmente */
+  /* Agrega cualquier otro estilo necesario, como posición absoluta, opacidad, etc. */
 }
